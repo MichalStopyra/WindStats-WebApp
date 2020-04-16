@@ -31,6 +31,12 @@ public class Spot extends AbstractEntity implements Cloneable {
     @JoinColumn(name = "country")
     private Country country;
 
+    @NotNull
+    private double latitude;
+
+    @NotNull
+    private double longtitude;
+
     /*public Spot(String name, String countryName, int windPercentage) {
         this.name = name;
         this.countryName = countryName;
@@ -65,6 +71,14 @@ public class Spot extends AbstractEntity implements Cloneable {
     public Type getType() { return type; }
 
     public void setType(Type type) { this.type = type; }
+
+    public double getLatitude() { return latitude; }
+
+    public void setLatitude(double latitude) { this.latitude = latitude; }
+
+    public double getLongtitude() { return longtitude; }
+
+    public void setLongtitude(double longtitude) { this.longtitude = longtitude; }
 
     @Override
     public String toString() {

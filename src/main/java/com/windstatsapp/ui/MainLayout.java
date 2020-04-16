@@ -16,6 +16,7 @@ import com.windstatsapp.ui.views.ListView;
 @PWA(
         name = "WindStatsApp",
         shortName = "WSAp",
+        iconPath = "./icons/icon.png",
         offlineResources = {
                 "./styles/offline.css",
                 "./images/offline.png" }

@@ -4,6 +4,8 @@ import com.windstatsapp.backend.entity.Country;
 import com.windstatsapp.backend.entity.Spot;
 import com.windstatsapp.backend.repository.CountryRepository;
 import com.windstatsapp.backend.repository.SpotRepository;
+import com.windstatsapp.backend.weatherapi.Weather;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -47,6 +49,20 @@ public class SpotService {
         spotRepository.save(spot);
     }*/
 
+    public static double windFromJson (){
+        String jsonString = Weather.doHttpGet();//assign your JSON String here
+        JSONObject obj = new JSONObject(jsonString);
+        return obj.getJSONObject("currently").getLong("windSpeed");
+
+
+        //String pageName = obj.getJSONObject("pageInfo").getString("pageName");
+
+        //JSONArray arr = obj.getJSONArray("posts");
+        //for (int i = 0; i < arr.length(); i++)
+        //{
+        //   String post_id = arr.getJSONObject(i).getString("post_id");
+        //}
+    }
 
 
 
@@ -64,16 +80,21 @@ public class SpotService {
             Random r = new Random(0);
             List<Country> countries = countryRepository.findAll();
             spotRepository.saveAll(
-                    Stream.of("Pozo_Izquierdo Spain", "Hel_Penninsula Poland", "Zegrzynskie_Lake Poland",
-                            "Karpathos Greece", "Prasonisi Greece")
+                    Stream.of("Pozo_Izquierdo Spain 27.8333 -15.4667", "Hel_Penninsula Poland 18.6788396 54.6957333",
+                            "Zegrzynskie_Lake Poland 21.012229 52.229676"/*Warsaw*/, "Karpathos Greece 35.583331 27.1333328",
+                            "Prasonisi Greece 35.876163162 27.75666364")
                             .map(name -> {
                                 String[] split = name.split(" ");
                                 Spot spot = new Spot();
                                 spot.setName(split[0]);
+                                spot.setLatitude(Double.valueOf (split[2]) );
+                                spot.setLongtitude(Double.valueOf (split[3]) );
                                 //spot.setCountry(split[1]);
                                 spot.setCountry(countries.get(r.nextInt(countries.size())));
                                 spot.setType(Spot.Type.values()[r.nextInt(Spot.Type.values().length)]);
-                                spot.setWindPercentage(r.nextInt()%100);
+                                //spot.setWindPercentage(r.nextInt()%100);
+                                Weather.setCoordinates(spot.getLatitude(), spot.getLatitude());
+                                spot.setWindPercentage((int)windFromJson());
                                 return spot;
                             }).collect(Collectors.toList()));
         }

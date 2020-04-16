@@ -22,6 +22,7 @@ public class ListView extends VerticalLayout {
     SpotService spotService;
     Grid<Spot> grid = new Grid<>(Spot.class);
     TextField filterText = new TextField();
+    String darksky;
     //String chosenMonth;
 
 
@@ -39,8 +40,12 @@ public class ListView extends VerticalLayout {
         add(getToolBar(), content);
         updateList();
 
+        //darksky = Weather.doHttpGet();
+        //add(darksky);
+
 
     }
+
 
     private void configureGrid() {
         grid.addClassName("spot-grid");
