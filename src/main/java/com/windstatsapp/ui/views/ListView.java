@@ -12,7 +12,10 @@ import com.windstatsapp.backend.entity.Country;
 import com.windstatsapp.backend.entity.Spot;
 import com.windstatsapp.backend.service.CountryService;
 import com.windstatsapp.backend.service.SpotService;
+import com.windstatsapp.backend.weatherapi.tools.Tools;
 import com.windstatsapp.ui.MainLayout;
+
+import java.util.ArrayList;
 
 
 @PageTitle("Spots | WindStatsApp" )
@@ -40,8 +43,17 @@ public class ListView extends VerticalLayout {
         add(getToolBar(), content);
         updateList();
 
-        //darksky = Weather.doHttpGet();
-        //add(darksky);
+        String c = new String("assdad");
+        add(c);
+        ArrayList<String> list= Tools.DateArr("january");
+        if (list.size()==0)
+            add("wehszlo");
+        for ( int i = 0; i<list.size(); ++i) {
+            add(list.get(i)); }
+        Tools.convertListToStream(Tools.DateArr("january")).forEach(s-> {
+            String a = s.toString();
+
+        });
 
 
     }

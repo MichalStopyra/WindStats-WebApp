@@ -1,0 +1,23 @@
+2020-04-18 22:20:02 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT ROUND( AVG WIND_SPEED[*])
+FROM DAY
+WHERE SPOT = 4 "; expected "., (, [, ::, *, /, %, +, -, ||, ~, !~, NOT, LIKE, ILIKE, REGEXP, IS, IN, BETWEEN, AND, OR, ,, )"; SQL statement:
+SELECT round( avg WIND_SPEED)
+from Day
+where spot = 4 [42001-199]
+2020-04-18 22:20:06 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT ROUND( AVG WIND_SPEED[*])
+FROM DAY
+WHERE SPOT = 4 "; expected "., (, [, ::, *, /, %, +, -, ||, ~, !~, NOT, LIKE, ILIKE, REGEXP, IS, IN, BETWEEN, AND, OR, ,, )"; SQL statement:
+SELECT round( avg WIND_SPEED)
+from Day
+where spot = 4 [42001-199]
+2020-04-18 22:20:40 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT ROUND( AVG WIND_SPEED[*])
+FROM (SELECT*
+FROM DAY
+WHERE SPOT = 4) "; expected "., (, [, ::, *, /, %, +, -, ||, ~, !~, NOT, LIKE, ILIKE, REGEXP, IS, IN, BETWEEN, AND, OR, ,, )"; SQL statement:
+SELECT round( avg WIND_SPEED)
+from (select*
+from Day
+where spot = 4) [42001-199]

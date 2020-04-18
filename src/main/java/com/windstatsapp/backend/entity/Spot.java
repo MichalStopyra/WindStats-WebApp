@@ -4,10 +4,13 @@ package com.windstatsapp.backend.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 public class Spot extends AbstractEntity implements Cloneable {
 
+    @NotNull
     public enum Type {
         FlatWater, Chop, Waves, HugeWaves
     }
@@ -36,6 +39,19 @@ public class Spot extends AbstractEntity implements Cloneable {
 
     @NotNull
     private double longtitude;
+
+    @NotNull
+    private double avgWindSpeed;
+
+    @NotNull
+    private double avgGustsSpeed;
+
+    @OneToMany(mappedBy = "spot", fetch = FetchType.EAGER)
+    private List<Day> dayList = new LinkedList<>();
+
+    //@NotNull
+    //@NotEmpty
+    //private String avgWindDirection;
 
     /*public Spot(String name, String countryName, int windPercentage) {
         this.name = name;
@@ -79,6 +95,18 @@ public class Spot extends AbstractEntity implements Cloneable {
     public double getLongtitude() { return longtitude; }
 
     public void setLongtitude(double longtitude) { this.longtitude = longtitude; }
+
+    public double getAvgWindSpeed() { return avgWindSpeed; }
+
+    public void setAvgWindSpeed(double avgWindSpeed) { this.avgWindSpeed = avgWindSpeed; }
+
+    public double getAvgGustsSpeed() { return avgGustsSpeed; }
+
+    public void setAvgGustsSpeed(double avgGustsSpeed) { this.avgGustsSpeed = avgGustsSpeed; }
+
+    public List<Day> getDayList() {        return dayList; }
+
+    public void setDayList(List<Day> dayList) { this.dayList = dayList; }
 
     @Override
     public String toString() {

@@ -1,10 +1,13 @@
 package com.windstatsapp.backend.service;
 
 import com.windstatsapp.backend.entity.Country;
+import com.windstatsapp.backend.entity.Day;
 import com.windstatsapp.backend.entity.Spot;
 import com.windstatsapp.backend.repository.CountryRepository;
+import com.windstatsapp.backend.repository.DayRepository;
 import com.windstatsapp.backend.repository.SpotRepository;
 import com.windstatsapp.backend.weatherapi.Weather;
+import com.windstatsapp.backend.weatherapi.tools.Tools;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +18,20 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 @Service
 public class SpotService {
     private static final Logger LOGGER = Logger.getLogger(SpotService.class.getName());
     private com.windstatsapp.backend.repository.SpotRepository spotRepository;
     private CountryRepository countryRepository;
+    private DayRepository dayRepository;
 
     public SpotService(SpotRepository spotRepository,
-                       CountryRepository countryRepository) {
+                       CountryRepository countryRepository,
+                       DayRepository dayRepository) {
         this.spotRepository = spotRepository;
         this.countryRepository = countryRepository;
+        this.dayRepository = dayRepository;
     }
 
     public List<Spot> findAll() {
@@ -49,8 +56,8 @@ public class SpotService {
         spotRepository.save(spot);
     }*/
 
-    public static double windFromJson (){
-        String jsonString = Weather.doHttpGet();//assign your JSON String here
+    public static double windFromJson (int unixTime){
+        String jsonString = Weather.doHttpGet(unixTime);//assign your JSON String here
         JSONObject obj = new JSONObject(jsonString);
         return obj.getJSONObject("currently").getLong("windSpeed");
 
@@ -68,38 +75,57 @@ public class SpotService {
 
 
     @PostConstruct
-    public void populateTestData() {
-        if (countryRepository.count() == 0) {
+    public void populateData() {
             countryRepository.saveAll(
                     Stream.of("Spain", "Greece", "Poland")
                             .map(Country::new)
                             .collect(Collectors.toList()));
-        }
 
-        if (spotRepository.count() == 0) {
+
             Random r = new Random(0);
             List<Country> countries = countryRepository.findAll();
-            spotRepository.saveAll(
-                    Stream.of("Pozo_Izquierdo Spain 27.8333 -15.4667", "Hel_Penninsula Poland 18.6788396 54.6957333",
-                            "Zegrzynskie_Lake Poland 21.012229 52.229676"/*Warsaw*/, "Karpathos Greece 35.583331 27.1333328",
-                            "Prasonisi Greece 35.876163162 27.75666364")
+            spotRepository.saveAll( /*Name country_nr type_nr latitude longtitude*/
+                    Stream.of("Pozo_Izquierdo 0 2 27.8333 -15.4667", "Hel_Penninsula 2 1 18.6788396 54.6957333",
+                            "Zegrzynskie_Lake 2 1 21.012229 52.229676"/*Warsaw*/, "Karpathos 1 0 35.583331 27.1333328",
+                            "Prasonisi 1 0 35.876163162 27.75666364", "El_Medano 0 2 28.03833318 -16.5333312" )
                             .map(name -> {
                                 String[] split = name.split(" ");
                                 Spot spot = new Spot();
                                 spot.setName(split[0]);
-                                spot.setLatitude(Double.valueOf (split[2]) );
-                                spot.setLongtitude(Double.valueOf (split[3]) );
+                                spot.setLatitude(Double.valueOf (split[3]) );
+                                spot.setLongtitude(Double.valueOf (split[4]) );
                                 //spot.setCountry(split[1]);
-                                spot.setCountry(countries.get(r.nextInt(countries.size())));
-                                spot.setType(Spot.Type.values()[r.nextInt(Spot.Type.values().length)]);
+                                spot.setCountry(countries.get(Integer.parseInt(split[1])));
+                                spot.setType(Spot.Type.values()[Integer.parseInt(split[2])]);
                                 //spot.setWindPercentage(r.nextInt()%100);
-                                Weather.setCoordinates(spot.getLatitude(), spot.getLatitude());
-                                spot.setWindPercentage((int)windFromJson());
-                                return spot;
+
+                                //?????????????? Weather.setCoordinates(spot.getLatitude(), spot.getLatitude());
+
+                                //spot.setWindPercentage((int)windFromJson());
+                                spot.setWindPercentage(0);
+
+                                    return spot;
+                            }).collect(Collectors.toList()));
+
+
+           // UserPreferences up = new UserPreferences();
+            List<Spot> spots = spotRepository.findAll();
+        for(int i=0 ; i < spots.size(); ++i) {
+            int fI = i;
+            dayRepository.saveAll(
+                    Tools.convertListToStream(Tools.DateArr("January"))
+                            .map(nameDay -> {
+                                Day day = new Day();
+                                nameDay = nameDay.concat("T12:00:00.000-0000");
+                                day.setDateMonth(nameDay.substring(0, 10));
+                                day.setDateDay(Tools.tsToSec8601(nameDay));
+                                day.setSpot(spots.get(fI));
+                                Weather.setCoordinates(day.getSpot().getLatitude(), day.getSpot().getLongtitude());
+                                day.setWindSpeed(Tools.mph_to_knots(windFromJson(day.getDateDay())));
+                                return day;
                             }).collect(Collectors.toList()));
         }
     }
-
 
 
 }

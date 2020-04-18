@@ -26,7 +26,7 @@ public class Weather {
         return coordinates;
     }
 
-    public static String doHttpGet(){
+    public static String doHttpGet(int unixTime){
         //http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=<ApiKey>
         //http://dataservice.accuweather.com/forecasts/v1/daily/1day/<CITYID>?apikey=<ApiKey>
 
@@ -34,7 +34,7 @@ public class Weather {
 
         //String url = "http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=" + ApiKey.getApiKey();
 
-        String url = "https://api.darksky.net/forecast/" + ApiKey.getApiKey() + getCoordinates();
+        String url = "https://api.darksky.net/forecast/" + ApiKey.getApiKey() + getCoordinates() + "," + Integer.toString(unixTime);
 
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet get = new HttpGet(url);
