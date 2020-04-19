@@ -12,10 +12,8 @@ import com.windstatsapp.backend.entity.Country;
 import com.windstatsapp.backend.entity.Spot;
 import com.windstatsapp.backend.service.CountryService;
 import com.windstatsapp.backend.service.SpotService;
-import com.windstatsapp.backend.weatherapi.tools.Tools;
+import com.windstatsapp.backend.weatherapi.UserPreferences;
 import com.windstatsapp.ui.MainLayout;
-
-import java.util.ArrayList;
 
 
 @PageTitle("Spots | WindStatsApp" )
@@ -25,9 +23,7 @@ public class ListView extends VerticalLayout {
     SpotService spotService;
     Grid<Spot> grid = new Grid<>(Spot.class);
     TextField filterText = new TextField();
-    String darksky;
-    //String chosenMonth;
-
+    UserPreferences u;
 
     public ListView( SpotService spotService,
                      CountryService countryService) {
@@ -41,21 +37,10 @@ public class ListView extends VerticalLayout {
         content.setSizeFull();
 
         add(getToolBar(), content);
-        updateList();
-
-        String c = new String("assdad");
-        add(c);
-        ArrayList<String> list= Tools.DateArr("january");
-        if (list.size()==0)
-            add("wehszlo");
-        for ( int i = 0; i<list.size(); ++i) {
-            add(list.get(i)); }
-        Tools.convertListToStream(Tools.DateArr("january")).forEach(s-> {
-            String a = s.toString();
-
-        });
-
-
+        if(UserPreferences.monthChoice == null || UserPreferences.monthChoice.isEmpty())
+            updateList();
+        else
+            updateListWithMonth();
     }
 
 
@@ -91,6 +76,11 @@ public class ListView extends VerticalLayout {
 
 
     private void updateList() {
+        grid.setItems(spotService.findAll(filterText.getValue()));
+    }
+
+    private void updateListWithMonth() {
+        spotService.setAvgWindAllSpots();
         grid.setItems(spotService.findAll(filterText.getValue()));
     }
 

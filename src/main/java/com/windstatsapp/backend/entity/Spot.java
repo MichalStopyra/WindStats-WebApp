@@ -19,9 +19,6 @@ public class Spot extends AbstractEntity implements Cloneable {
     @NotEmpty
     private String name = "";
 
-   /* @NotNull
-    @NotEmpty
-    private String countryName = "";*/
 
     @NotNull
     private int windPercentage;

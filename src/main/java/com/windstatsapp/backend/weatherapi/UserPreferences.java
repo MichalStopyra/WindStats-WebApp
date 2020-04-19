@@ -5,6 +5,7 @@ public class UserPreferences {
     public static String monthChoice;
 
     public UserPreferences() {
+        monthChoice = null;
     }
 
     public static String windChoice;

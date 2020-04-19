@@ -16,6 +16,10 @@ public class Day extends AbstractEntity {
     @NotNull
     private String dateMonth;
 
+    @NotEmpty
+    @NotNull
+    private String monthName;
+
     @NotNull
     private double windSpeed;
 
@@ -29,7 +33,9 @@ public class Day extends AbstractEntity {
     @JoinColumn(name = "spot")
     private Spot spot;
 
+    public String getMonthName() { return monthName; }
 
+    public void setMonthName(String monthName) { this.monthName = monthName; }
 
     public int getDateDay() { return dateDay; }
 

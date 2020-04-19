@@ -45,6 +45,7 @@ public class MainView extends VerticalLayout {
                 .asRequired(
                         "Please choose the appropriate month")
                 .bind(UserPreferences::getMonthChoice, UserPreferences::setMonthChoice);
+        //userPreferences.setMonthChoice(monthSelect.getValue());
 
 
         Select<String> knotsSelect = new Select<>();
