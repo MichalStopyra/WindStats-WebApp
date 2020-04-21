@@ -23,24 +23,25 @@ public class ListView extends VerticalLayout {
     SpotService spotService;
     Grid<Spot> grid = new Grid<>(Spot.class);
     TextField filterText = new TextField();
-    UserPreferences u;
 
     public ListView( SpotService spotService,
                      CountryService countryService) {
         this.spotService = spotService;
         addClassName("list-view");
         setSizeFull();
+
+        if(UserPreferences.monthChoice != null /* UserPreferences.monthChoice.isEmpty()*/) {
+            updateListWithMonth();
+        }
+
         configureGrid();
 
         Div content = new Div(grid);
         content.addClassName("content");
         content.setSizeFull();
-
         add(getToolBar(), content);
-        if(UserPreferences.monthChoice == null || UserPreferences.monthChoice.isEmpty())
-            updateList();
-        else
-            updateListWithMonth();
+
+        updateList();
     }
 
 
@@ -48,7 +49,7 @@ public class ListView extends VerticalLayout {
         grid.addClassName("spot-grid");
         grid.setSizeFull();
         grid.removeColumnByKey("country");
-        grid.setColumns("name", "windPercentage", "type");
+        grid.setColumns("name", "windPercentage", "type", "avgWindSpeed");
         grid.addColumn(spot -> {
             Country country = spot.getCountry();
             return country == null ? "-" : country.getName();
@@ -56,6 +57,7 @@ public class ListView extends VerticalLayout {
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
+        grid.setSortableColumns("windPercentage");
         //grid.asSingleSelect().addValueChangeListener(evt -> editContact(evt.getValue()));
 
     }
@@ -80,7 +82,7 @@ public class ListView extends VerticalLayout {
     }
 
     private void updateListWithMonth() {
-        spotService.setAvgWindAllSpots();
+        spotService.setWindPercentage_And_AvgWindAllSpots();
         grid.setItems(spotService.findAll(filterText.getValue()));
     }
 

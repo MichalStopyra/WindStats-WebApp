@@ -27,10 +27,10 @@ public class DayService {
         }
     }
 
-    public Double avgWindSpeed (String monthM) {
+    public Double avgWindSpeed (String monthM, Long spotID) {
        if (monthM == null || monthM.isEmpty())
            return 0.0;
        else
-           return dayRepository.avgWindSpeed(monthM);
+           return dayRepository.avgWindSpeed(monthM,spotID);
     }
 }

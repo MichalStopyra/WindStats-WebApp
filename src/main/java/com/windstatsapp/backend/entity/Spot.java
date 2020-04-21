@@ -46,6 +46,17 @@ public class Spot extends AbstractEntity implements Cloneable {
     @OneToMany(mappedBy = "spot", fetch = FetchType.EAGER)
     private List<Day> dayList = new LinkedList<>();
 
+    @OneToMany(mappedBy = "spot", fetch = FetchType.EAGER)
+    private List<Day> monthList = new LinkedList<>();
+
+    public List<Day> getMonthList() {
+        return monthList;
+    }
+
+    public void setMonthList(List<Day> monthList) {
+        this.monthList = monthList;
+    }
+
     //@NotNull
     //@NotEmpty
     //private String avgWindDirection;

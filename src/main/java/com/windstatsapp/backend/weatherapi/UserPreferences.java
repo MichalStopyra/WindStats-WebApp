@@ -11,6 +11,24 @@ public class UserPreferences {
     public static String windChoice;
     public static String spotTypeChoice;
 
+    public static int minWind;
+    public static int maxWind;
+
+    public static int getMinWind() {
+        return minWind;
+    }
+
+    public static void setMinWind(int minWind) {
+        UserPreferences.minWind = minWind;
+    }
+
+    public static int getMaxWind() {
+        return maxWind;
+    }
+
+    public static void setMaxWind(int maxWind) {
+        UserPreferences.maxWind = maxWind;
+    }
 
     public String getMonthChoice() {
         return monthChoice;

@@ -9,6 +9,7 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.windstatsapp.backend.service.SpotService;
 import com.windstatsapp.backend.weatherapi.UserPreferences;
 import com.windstatsapp.ui.MainLayout;
 import org.springframework.context.annotation.Scope;
@@ -25,10 +26,12 @@ public class MainView extends VerticalLayout {
     UserPreferences userPreferences = new UserPreferences();
     Binder<UserPreferences> binder = new Binder<>();
 
+    SpotService spotService;//???????????????????????????????????
 
 
-    public MainView() {
+    public MainView(SpotService spotService) {
         //createHeader();
+        this.spotService = spotService;
         createInstruction();
         createSelects();
         createApplyButton();
@@ -45,11 +48,9 @@ public class MainView extends VerticalLayout {
                 .asRequired(
                         "Please choose the appropriate month")
                 .bind(UserPreferences::getMonthChoice, UserPreferences::setMonthChoice);
-        //userPreferences.setMonthChoice(monthSelect.getValue());
-
 
         Select<String> knotsSelect = new Select<>();
-        knotsSelect.setItems("0-10", "11-20", "21-30", "31-40", "41-50");
+        knotsSelect.setItems("00-10", "11-20", "21-30", "31-40", "41-50");
         knotsSelect.setLabel("Wind Strength");
         knotsSelect.setEmptySelectionAllowed(false);
         //titleSelect.addComponents(null, new Hr());
@@ -57,6 +58,7 @@ public class MainView extends VerticalLayout {
                 .asRequired(
                         "Please choose the appropriate wind strength")
                 .bind(UserPreferences::getWindChoice, UserPreferences::setWindChoice);
+
 
 
         Select<String> spotTypeSelect = new Select<>();
@@ -93,8 +95,9 @@ public class MainView extends VerticalLayout {
 
         //navigating
         button.addClickListener( event -> {
-            if (binder.writeBeanIfValid(userPreferences))
+            if (binder.writeBeanIfValid(userPreferences)) {
                 UI.getCurrent().navigate("spotlist");
+            }
         });
 
         VerticalLayout temp = new VerticalLayout(button);
@@ -104,6 +107,7 @@ public class MainView extends VerticalLayout {
 
     private void showButtonClickedMessage(ClickEvent<Button> buttonClickEvent) {
     }
+
 
 
    /* private void createHeader() {
