@@ -12,6 +12,7 @@ import com.windstatsapp.backend.entity.Country;
 import com.windstatsapp.backend.entity.Spot;
 import com.windstatsapp.backend.service.CountryService;
 import com.windstatsapp.backend.service.SpotService;
+import com.windstatsapp.backend.weatherapi.UserPreferences;
 import com.windstatsapp.ui.MainLayout;
 
 
@@ -22,31 +23,33 @@ public class ListView extends VerticalLayout {
     SpotService spotService;
     Grid<Spot> grid = new Grid<>(Spot.class);
     TextField filterText = new TextField();
-    //String chosenMonth;
-
 
     public ListView( SpotService spotService,
                      CountryService countryService) {
         this.spotService = spotService;
         addClassName("list-view");
         setSizeFull();
+
+        if(UserPreferences.monthChoice != null /* UserPreferences.monthChoice.isEmpty()*/) {
+            updateListWithMonth();
+        }
+
         configureGrid();
 
         Div content = new Div(grid);
         content.addClassName("content");
         content.setSizeFull();
-
         add(getToolBar(), content);
+
         updateList();
-
-
     }
+
 
     private void configureGrid() {
         grid.addClassName("spot-grid");
         grid.setSizeFull();
         grid.removeColumnByKey("country");
-        grid.setColumns("name", "windPercentage", "type");
+        grid.setColumns("name", "windPercentage", "type", "avgWindSpeed");
         grid.addColumn(spot -> {
             Country country = spot.getCountry();
             return country == null ? "-" : country.getName();
@@ -54,6 +57,7 @@ public class ListView extends VerticalLayout {
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
+        grid.setSortableColumns("windPercentage");
         //grid.asSingleSelect().addValueChangeListener(evt -> editContact(evt.getValue()));
 
     }
@@ -74,6 +78,11 @@ public class ListView extends VerticalLayout {
 
 
     private void updateList() {
+        grid.setItems(spotService.findAll(filterText.getValue()));
+    }
+
+    private void updateListWithMonth() {
+        spotService.setWindPercentage_And_AvgWindAllSpots();
         grid.setItems(spotService.findAll(filterText.getValue()));
     }
 
