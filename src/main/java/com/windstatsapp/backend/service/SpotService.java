@@ -16,8 +16,8 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,15 +49,20 @@ public class SpotService {
         }
     }
 
+    public List<Spot> filterSpotByType (String filterText) {
+        return spotRepository.filterBySpotType(UserPreferences.spotTypeChoice, filterText);
+    }
 
     @Transactional
-    public void setWindPercentage_And_AvgWindAllSpots (){
+    public void setSpotParameters (){
         List<Spot> spots = spotRepository.findAll();
         for (int i = 0; i < spots.size(); ++i ){
-            spots.get(i).setAvgWindSpeed(dayRepository.avgWindSpeed(UserPreferences.monthChoice, spots.get(i).getId()));
+            spots.get(i).setAvgWindSpeed(Tools.round( dayRepository.avgWindSpeed(UserPreferences.monthChoice, spots.get(i).getId()),2) );
             spots.get(i).setWindPercentage(setWindPercentage(spots.get(i).getId()));
-            }
+            spots.get(i).setAvgGustSpeed(Tools.round(dayRepository.avgGustSpeed(UserPreferences.monthChoice, spots.get(i).getId()),2) );
+            spots.get(i).setAvgTemperature((int) Math.round(dayRepository.avgTemperature( UserPreferences.monthChoice, spots.get(i).getId())) );
         }
+    }
 
     /*public void save(Spot spot) {
         if (spot == null) {
@@ -68,19 +73,9 @@ public class SpotService {
         spotRepository.save(spot);
     }*/
 
-    public static double windFromJson(int unixTime) {
-        String jsonString = Weather.doHttpGet(unixTime);//assign your JSON String here
+    public static double parameterFromJson(String parameter, String jsonString) {
         JSONObject obj = new JSONObject(jsonString);
-        return obj.getJSONObject("currently").getLong("windSpeed");
-
-
-        //String pageName = obj.getJSONObject("pageInfo").getString("pageName");
-
-        //JSONArray arr = obj.getJSONArray("posts");
-        //for (int i = 0; i < arr.length(); i++)
-        //{
-        //   String post_id = arr.getJSONObject(i).getString("post_id");
-        //}
+        return obj.getJSONObject("currently").getLong(parameter);/*("windSpeed");*/
     }
 
     public int setWindPercentage(Long spotID){
@@ -107,13 +102,11 @@ public class SpotService {
                             .collect(Collectors.toList()));
 
 
-            Random r = new Random(0);
-
             //  if (spotRepository.count() < 2 ) {
             List<Country> countries = countryRepository.findAll();
             spotRepository.saveAll( /*Name country_nr type_nr latitude longtitude*/
-                    Stream.of("Pozo_Izquierdo 0 2 27.8333 -15.4667", "Hel_Penninsula 2 1 18.6788396 54.6957333"/*,
-                            "Zegrzynskie_Lake 2 1 21.012229 52.229676"/*Warsaw*, "Karpathos 1 0 35.583331 27.1333328",
+                    Stream.of("Pozo_Izquierdo 0 2 27.8333 -15.4667", "Hel_Penninsula 2 1 54.6957333 18.6788396 "/*,
+                            "Zegrzynskie_Lake 2 1 52.229676 21.012229"/*Warsaw*, "Karpathos 1 0 35.583331 27.1333328",
                             "Prasonisi 1 0 35.876163162 27.75666364", "El_Medano 0 2 28.03833318 -16.5333312"*/)
                             //.map(str-> { String[] s = str.split(" ");
                             //return s[0];}).filter(str-> spotRepository.checkIfExists() == null)
@@ -137,22 +130,35 @@ public class SpotService {
                                 //spot.setWindPercentage((int)windFromJson());
                                 spot.setWindPercentage(0);
                                 spot.setAvgWindSpeed(0.0);
+                                spot.setAvgGustSpeed(0.0);
+                                spot.setAvgTemperature(0);
+
+                                spot.setImgPath("./images/".concat( spot.getName().concat(".png")));
+
+                                spot.setSpotInfoTextPath("./SpotInfoText/".concat( spot.getName().concat(".txt")));
+                                spot.setSpotInfoText(Tools.readStringFromFile(spot.getSpotInfoTextPath()));
 
                                 return spot;
                             }).collect(Collectors.toList()));
             //   }
 
-            // UserPreferences up = new UserPreferences();
+        Date today = new Date();
             List<Spot> spots = spotRepository.findAll();
         List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June",
                                             "July", "August", "September", "October", "November", "December");
-        String tempMonth = "February";
-        //for(int j = 0; i < months.size(); ++j)
+       // for (int tempYear = 2019; tempYear <= 2020; ++tempYear)
+        //for(int j = 0; j < months.size(); ++j) {
+            //String tempMonth = months.get(j);
+        String tempMonth = "January";
+            //DateTime temp = new DateTime(tempYear, tempMonth, 1, 12, 0);
+            //if(temp.toDate().after(today))
+            //  return;
+
             for (int i = 0; i < spots.size(); ++i) {
                 int fI = i;
                 dayRepository.saveAll(
                         Tools.convertListToStream(Tools.DateArr(tempMonth))
-                                .filter(str-> dayRepository.checkIfExists(spots.get(fI).getId(), str) == null)
+                                .filter(str -> dayRepository.checkIfExists(spots.get(fI).getId(), str) == null)
                                 .map(nameDay -> {
                                     Day day = new Day();
                                     nameDay = nameDay.concat("T12:00:00.000-0000");
@@ -162,16 +168,18 @@ public class SpotService {
                                     day.setDateDay(Tools.tsToSec8601(nameDay));
                                     day.setSpot(spots.get(fI));
                                     Weather.setCoordinates(day.getSpot().getLatitude(), day.getSpot().getLongtitude());
-                                    day.setWindSpeed(Tools.mph_to_knots(windFromJson(day.getDateDay())));
+
+                                    String jsonString = Weather.doHttpGet(day.getDateDay());
+
+                                    day.setWindSpeed(Tools.mph_to_knots(parameterFromJson( "windSpeed", jsonString)));
+                                    day.setGustSpeed(Tools.mph_to_knots(parameterFromJson( "windGust",jsonString)));
+                                    day.setTemperature(Tools.fahrenheit_to_celsius(parameterFromJson("temperature",jsonString)));
                                     return day;
                                 }).collect(Collectors.toList()));
-           // }
-            //month
 
-
-
-
-        }
+                //month
+            }
+       // }
 
 
     }

@@ -62,7 +62,7 @@ public class MainView extends VerticalLayout {
 
 
         Select<String> spotTypeSelect = new Select<>();
-        spotTypeSelect.setItems("Flat water", "Small Waves", "Choppy", "Huge Waves");
+        spotTypeSelect.setItems("Flat Water", "Wave", "Chop");
         spotTypeSelect.setLabel("Spot Type");
         spotTypeSelect.setEmptySelectionAllowed(false);
         //titleSelect.addComponents(null, new Hr());

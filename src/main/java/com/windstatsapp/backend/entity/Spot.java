@@ -4,6 +4,7 @@ package com.windstatsapp.backend.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Spot extends AbstractEntity implements Cloneable {
 
     @NotNull
     public enum Type {
-        FlatWater, Chop, Waves, HugeWaves
+        Flat_Water, Chop, Wave
     }
 
     @NotNull
@@ -41,7 +42,22 @@ public class Spot extends AbstractEntity implements Cloneable {
     private double avgWindSpeed;
 
     @NotNull
-    private double avgGustsSpeed;
+    private double avgGustSpeed;
+
+    @NotNull
+    private int avgTemperature;
+
+    @NotNull
+    @NotEmpty
+    private String imgPath = "";
+    @NotNull
+    @NotEmpty
+    private String spotInfoTextPath = "";
+
+    @NotNull
+    @NotEmpty
+    @Size(min = 0, max = 2147483)
+    private String spotInfoText = "";
 
     @OneToMany(mappedBy = "spot", fetch = FetchType.EAGER)
     private List<Day> dayList = new LinkedList<>();
@@ -57,9 +73,6 @@ public class Spot extends AbstractEntity implements Cloneable {
         this.monthList = monthList;
     }
 
-    //@NotNull
-    //@NotEmpty
-    //private String avgWindDirection;
 
     /*public Spot(String name, String countryName, int windPercentage) {
         this.name = name;
@@ -108,13 +121,29 @@ public class Spot extends AbstractEntity implements Cloneable {
 
     public void setAvgWindSpeed(double avgWindSpeed) { this.avgWindSpeed = avgWindSpeed; }
 
-    public double getAvgGustsSpeed() { return avgGustsSpeed; }
+    public double getAvgGustSpeed() { return avgGustSpeed; }
 
-    public void setAvgGustsSpeed(double avgGustsSpeed) { this.avgGustsSpeed = avgGustsSpeed; }
+    public void setAvgGustSpeed(double avgGustSpeed) { this.avgGustSpeed = avgGustSpeed; }
 
     public List<Day> getDayList() {        return dayList; }
 
     public void setDayList(List<Day> dayList) { this.dayList = dayList; }
+
+    public int getAvgTemperature() { return avgTemperature; }
+
+    public void setAvgTemperature(int avgTemperature) { this.avgTemperature = avgTemperature; }
+
+    public String getImgPath() { return imgPath; }
+
+    public void setImgPath(String imgPath) { this.imgPath = imgPath; }
+
+    public String getSpotInfoText() { return spotInfoText; }
+
+    public String getSpotInfoTextPath() { return spotInfoTextPath; }
+
+    public void setSpotInfoTextPath(String spotInfoTextPath) { this.spotInfoTextPath = spotInfoTextPath; }
+
+    public void setSpotInfoText(String spotInfoText) { this.spotInfoText = spotInfoText; }
 
     @Override
     public String toString() {

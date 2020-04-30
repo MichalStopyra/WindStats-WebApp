@@ -21,5 +21,10 @@ public interface SpotRepository extends JpaRepository <Spot, Long> {
     @Query("select s from Spot s " +
             "where lower(s.name) like lower(:spotName)")
     Spot checkIfExists(@Param("spotName") String spotName);
+
+    @Query("select s from Spot s " +
+            "where lower(s.type) like lower(:chosenType) and (lower(s.name) like lower(concat('%', :searchTerm, '%')) " +
+            " or lower(s.country) like lower(concat('%', :searchTerm, '%')) )")
+    List<Spot> filterBySpotType(@Param("chosenType") String chosenType, @Param("searchTerm") String searchTerm);
 }
 

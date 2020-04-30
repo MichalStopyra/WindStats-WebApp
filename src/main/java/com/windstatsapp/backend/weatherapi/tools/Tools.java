@@ -2,8 +2,15 @@ package com.windstatsapp.backend.weatherapi.tools;
 
 import org.joda.time.DateTime;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +20,16 @@ public class Tools {
 
     public static double mph_to_knots(double mph){
         return mph * 0.868976242;
+    }
+
+    public static double fahrenheit_to_celsius(double fahr){ return (int) Math.round((fahr-32.0)*0.5556); }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
         public static Integer tsToSec8601(String timestamp){
@@ -99,9 +116,10 @@ public class Tools {
         int monthInt = monthStringToInt(month);//temp
         DateTime DateT = new DateTime(year, monthInt, day, 12, 0);
         Date date;
+        LocalDate today = LocalDate.now();
         SimpleDateFormat ft =
                 new SimpleDateFormat ("yyyy-MM-dd");
-        while (DateT.getMonthOfYear() == monthInt) {
+        while ( DateT.getMonthOfYear() == monthInt && (ft.format(DateT.toDate()).compareTo(today.toString()) != 0)  ) {
             date = DateT.toDate();
             ar.add(ft.format(date));
             DateT = DateT.plusDays(1);
@@ -113,5 +131,21 @@ public class Tools {
     {
         return list.stream();
     }
+
+
+    public static String readStringFromFile(String filePath)
+    {
+        StringBuilder contentBuilder = new StringBuilder();
+        try (Stream<String> stream = Files.lines( Paths.get(filePath), StandardCharsets.UTF_8))
+        {
+            stream.forEach(s -> contentBuilder.append(s).append("\n"));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return contentBuilder.toString();
+    }
+
 
 }
