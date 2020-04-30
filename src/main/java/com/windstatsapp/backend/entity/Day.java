@@ -23,11 +23,11 @@ public class Day extends AbstractEntity {
     @NotNull
     private double windSpeed;
 
-    //@NotNull
-    //private double gustSpeed;
+    @NotNull
+    private double gustSpeed;
 
-    //@NotNull
-    //private double temperature;
+    @NotNull
+    private double temperature;
 
     @ManyToOne
     @JoinColumn(name = "spot")
@@ -49,12 +49,15 @@ public class Day extends AbstractEntity {
 
     public void setWindSpeed(double windSpeed) { this.windSpeed = windSpeed;    }
 
-    //public double getGustSpeed() {        return gustSpeed; }
+    public double getGustSpeed() {        return gustSpeed; }
 
-    //public void setGustSpeed(double gustSpeed) {        this.gustSpeed = gustSpeed; }
+    public void setGustSpeed(double gustSpeed) {        this.gustSpeed = gustSpeed; }
 
     public Spot getSpot() { return spot; }
 
     public void setSpot(Spot spot) { this.spot = spot; }
 
+    public double getTemperature() { return temperature; }
+
+    public void setTemperature(double temperature) {        this.temperature = temperature; }
 }

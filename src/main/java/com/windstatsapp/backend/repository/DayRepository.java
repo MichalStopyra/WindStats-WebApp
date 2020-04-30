@@ -28,6 +28,10 @@ public interface DayRepository extends JpaRepository<Day, Long> {
     @Query ("SELECT COUNT(d.windSpeed) FROM Day d WHERE d.windSpeed <= :maxWind AND d.windSpeed >= :minWind AND d.spot.id = :spotID AND lower(d.monthName) like lower (:date)")
     int howManyDaysInWindRange(@Param("maxWind") double maxWind, @Param("minWind") double minWind, @Param("spotID") Long spotID, @Param("date") String date);
 
+    @Query("SELECT AVG(d.gustSpeed) FROM Day d WHERE lower(d.monthName) like lower(concat('%', :monthM, '%')) AND d.spot.id =:spotID" )
+    Double avgGustSpeed(@Param("monthM") String monthM, @Param("spotID") Long spotID);
 
+    @Query("SELECT AVG(d.temperature) FROM Day d WHERE lower(d.monthName) like lower(concat('%', :monthM, '%')) AND d.spot.id =:spotID" )
+    Double avgTemperature(@Param("monthM") String monthM, @Param("spotID") Long spotID);
 
 }
