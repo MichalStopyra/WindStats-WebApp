@@ -14,9 +14,20 @@ public class UserPreferences {
     public static int minWind;
     public static int maxWind;
 
+    public static String country;
+
+    public static String getCountry() {
+        return country;
+    }
+
+    public static void setCountry(String country) {
+        UserPreferences.country = country;
+    }
+
     public static int getMinWind() {
         return minWind;
     }
+
 
     public static void setMinWind(int minWind) {
         UserPreferences.minWind = minWind;

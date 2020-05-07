@@ -12,6 +12,7 @@ import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.windstatsapp.ui.views.ListView;
+import com.windstatsapp.ui.views.MapView;
 
 @PWA(
         name = "WindStatsApp",
@@ -26,7 +27,9 @@ import com.windstatsapp.ui.views.ListView;
 //@CssImport("./styles/shared-styles.css")
 public class MainLayout extends AppLayout {
 
+    MapView m = new MapView();
     public MainLayout (){
+        m.setVisible(false);
         createHeader();
         createDrawer();
     }
@@ -51,8 +54,12 @@ public class MainLayout extends AppLayout {
         RouterLink listLink = new RouterLink("List", ListView.class);
         listLink.setHighlightCondition(HighlightConditions.sameLocation());
 
+        RouterLink mapLink = new RouterLink("Map", MapView.class);
+        mapLink.setHighlightCondition(HighlightConditions.sameLocation());
+
         addToDrawer(new VerticalLayout(
-                listLink
+                listLink,
+                mapLink
                 //new RouterLink("Dashboard", DashboardView.class)
         ));
     }

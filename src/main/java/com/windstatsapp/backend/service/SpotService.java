@@ -147,9 +147,9 @@ public class SpotService {
         List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June",
                                             "July", "August", "September", "October", "November", "December");
        // for (int tempYear = 2019; tempYear <= 2020; ++tempYear)
-        //for(int j = 0; j < months.size(); ++j) {
-            //String tempMonth = months.get(j);
-        String tempMonth = "January";
+        for(int j = 0; j < months.size(); ++j) {
+            String tempMonth = months.get(j);
+        //String tempMonth = "January";
             //DateTime temp = new DateTime(tempYear, tempMonth, 1, 12, 0);
             //if(temp.toDate().after(today))
             //  return;
@@ -179,7 +179,7 @@ public class SpotService {
 
                 //month
             }
-       // }
+        }
 
 
     }

@@ -1,4 +1,4 @@
-package com.windstatsapp.ui.views.spotInfo;
+package com.windstatsapp.ui.views;
 
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
