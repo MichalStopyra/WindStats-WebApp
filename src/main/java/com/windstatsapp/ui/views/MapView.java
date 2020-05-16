@@ -32,10 +32,11 @@ public class MapView extends PolymerTemplate<MapView.MapViewModel> {
 
 @EventHandler
 private void handleClick( @EventData("event.srcElement.id") String name) {
-    System.out.println("Country name: " + name);
     setCountry(name);
     UI.getCurrent().navigate("country");
 }
+
+
 
 private void setCountry(String countryName) {
         if(countryName!=null) {

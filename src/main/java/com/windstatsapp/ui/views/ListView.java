@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -47,7 +48,7 @@ public class ListView extends VerticalLayout {
 
         configureGrid();
 
-        spotInfoView = new SpotInfoView(null);
+        spotInfoView = new SpotInfoView(null, spotService);
 
         //Div content = new Div(grid, spotInfoView);
         HorizontalLayout content = new HorizontalLayout(grid, spotInfoView);
@@ -87,7 +88,8 @@ public class ListView extends VerticalLayout {
         grid.getColumnByKey("avgGustSpeed").setHeader("Gust Speed [knots] ");
         grid.getColumnByKey("avgTemperature").setHeader("Temperature [°C] ");
 
-
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
+                GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
         grid.setSortableColumns("windPercentage");
         grid.asSingleSelect().addValueChangeListener(evt -> displaySpotInfo(evt.getValue()));
 
@@ -147,6 +149,9 @@ public class ListView extends VerticalLayout {
         if (spot == null) {
             closeSpotInfo();
         } else {
+            if(spotInfoView.isVisible() )
+                spotInfoView.removeComponents();
+            spotInfoView.setForecastFlag(false);
             spotInfoView.setSpot(spot);
             spotInfoView.setVisible(true);
             addClassName("editing");

@@ -53,6 +53,10 @@ public class SpotService {
         return spotRepository.filterBySpotType(UserPreferences.spotTypeChoice, filterText);
     }
 
+    public List<Spot> filterSpotByCountry () {
+        return spotRepository.filterBySpotCountry(UserPreferences.country);
+    }
+
     @Transactional
     public void setSpotParameters (){
         List<Spot> spots = spotRepository.findAll();
@@ -89,6 +93,14 @@ public class SpotService {
         return (int) result;
     }
 
+    public double setAvgWindSpeedForHelper(String month, Spot spot) {
+        return Tools.round( dayRepository.avgWindSpeed(month, spot.getId()),2) ; }
+    public double setAvgGustSpeedForHelper(String month, Spot spot) {
+        return Tools.round(dayRepository.avgGustSpeed(month, spot.getId()),2); }
+    public int setAvgTempForHelper(String month, Spot spot) {
+       return (int) Math.round(dayRepository.avgTemperature( month, spot.getId())); }
+
+
 
     @PostConstruct
     public void populateData() {
@@ -105,9 +117,9 @@ public class SpotService {
             //  if (spotRepository.count() < 2 ) {
             List<Country> countries = countryRepository.findAll();
             spotRepository.saveAll( /*Name country_nr type_nr latitude longtitude*/
-                    Stream.of("Pozo_Izquierdo 0 2 27.8333 -15.4667", "Hel_Penninsula 2 1 54.6957333 18.6788396 "/*,
-                            "Zegrzynskie_Lake 2 1 52.229676 21.012229"/*Warsaw*, "Karpathos 1 0 35.583331 27.1333328",
-                            "Prasonisi 1 0 35.876163162 27.75666364", "El_Medano 0 2 28.03833318 -16.5333312"*/)
+                    Stream.of("Pozo_Izquierdo 0 2 27.8333 -15.4667", "Hel_Penninsula 2 1 54.6957333 18.6788396 ",
+                            "Zegrzynskie_Lake 2 1 52.229676 21.012229", "Karpathos 1 0 35.583331 27.1333328",
+                            "Prasonisi 1 0 35.876163162 27.75666364", "El_Medano 0 2 28.03833318 -16.5333312")
                             //.map(str-> { String[] s = str.split(" ");
                             //return s[0];}).filter(str-> spotRepository.checkIfExists() == null)
                             .filter(str-> spotRepository.checkIfExists(str.split(" ")[0]) == null )
