@@ -25,7 +25,6 @@ import com.windstatsapp.ui.MainLayout;
 public class MapView extends PolymerTemplate<MapView.MapViewModel> {
 
 
-
     public MapView() {
 
     }

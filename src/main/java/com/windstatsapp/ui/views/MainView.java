@@ -51,7 +51,7 @@ public class MainView extends VerticalLayout {
 
         Select<String> knotsSelect = new Select<>();
         knotsSelect.setItems("00-10", "11-20", "21-30", "31-40", "41-50");
-        knotsSelect.setLabel("Wind Strength");
+        knotsSelect.setLabel("Wind Strength [knots]");
         knotsSelect.setEmptySelectionAllowed(false);
         //titleSelect.addComponents(null, new Hr());
         binder.forField(knotsSelect)
@@ -82,7 +82,7 @@ public class MainView extends VerticalLayout {
 
 
     private void createInstruction() {
-        String instruction = new String("Choose your preferences");
+        String instruction = new String("Choose your preferences\nand WindStats App will list you the best wind/kitesurfing spots in Europe");
         VerticalLayout text = new VerticalLayout();
         text.add(instruction);
         text.setDefaultHorizontalComponentAlignment(Alignment.CENTER);

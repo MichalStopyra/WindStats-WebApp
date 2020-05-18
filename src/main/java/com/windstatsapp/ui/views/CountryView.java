@@ -17,6 +17,7 @@ import com.windstatsapp.backend.service.CountryService;
 import com.windstatsapp.backend.service.SpotService;
 import com.windstatsapp.backend.weatherapi.UserPreferences;
 import com.windstatsapp.ui.MainLayout;
+import com.windstatsapp.ui.views.spotInfoView.SpotInfoView;
 
 import java.util.List;
 
@@ -33,9 +34,8 @@ public class CountryView extends VerticalLayout{
 
     public CountryView ( SpotService spotService,
                         CountryService countryService ) {
-        if (UserPreferences.country.isEmpty() || UserPreferences.country == null)
-            System.out.println("asdsad");
-         //   UI.getCurrent().navigate("");
+        if ( UserPreferences.country == null)
+            UserPreferences.setCountry("None");
         countryName = new String(UserPreferences.country);
 
         this.spotService = spotService;
