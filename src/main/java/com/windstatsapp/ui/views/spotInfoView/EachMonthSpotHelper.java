@@ -1,4 +1,4 @@
-package com.windstatsapp.ui.views;
+package com.windstatsapp.ui.views.spotInfoView;
 
 import com.windstatsapp.backend.entity.Spot;
 import com.windstatsapp.backend.service.SpotService;

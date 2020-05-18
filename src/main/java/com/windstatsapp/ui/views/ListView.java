@@ -19,7 +19,7 @@ import com.windstatsapp.backend.service.CountryService;
 import com.windstatsapp.backend.service.SpotService;
 import com.windstatsapp.backend.weatherapi.UserPreferences;
 import com.windstatsapp.ui.MainLayout;
-
+import com.windstatsapp.ui.views.spotInfoView.SpotInfoView;
 
 @PageTitle("Spots | WindStatsApp" )
 @Route(value = "spotlist", layout = MainLayout.class)

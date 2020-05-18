@@ -5,6 +5,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -40,8 +41,9 @@ public class MainLayout extends AppLayout {
         logo.addClassName("logo");
         logo.addClickListener( e-> UI.getCurrent().navigate("") );
 
+        Image icon = new Image("./icons/icon_smaller.png", "spotImage");
 
-        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), logo);
+        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), icon, logo);
         header.addClassName("header");
         header.setWidth("100%");
         header.expand(logo);

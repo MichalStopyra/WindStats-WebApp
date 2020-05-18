@@ -68,14 +68,6 @@ public class SpotService {
         }
     }
 
-    /*public void save(Spot spot) {
-        if (spot == null) {
-            LOGGER.log(Level.SEVERE,
-                    "Spot is null. Are you sure you have connected your form to the application?");
-            return;
-        }
-        spotRepository.save(spot);
-    }*/
 
     public static double parameterFromJson(String parameter, String jsonString) {
         JSONObject obj = new JSONObject(jsonString);
@@ -105,41 +97,40 @@ public class SpotService {
     @PostConstruct
     public void populateData() {
 
-       //wc if (countryRepository.count() == 0) {
 
             countryRepository.saveAll(
-                    Stream.of("Spain", "Greece", "Poland")
+                    Stream.of("Spain", "Greece", "Poland", "Austria", "Belgium", "Germany", "Italy", "Denmark", "Montenegro", "Netherlands",
+                            "Portugal", "Switzerland", "United_Kingdom")
                             .filter(str -> countryRepository.checkIfExists(str) == null)
                             .map(Country::new)
                             .collect(Collectors.toList()));
 
 
-            //  if (spotRepository.count() < 2 ) {
             List<Country> countries = countryRepository.findAll();
             spotRepository.saveAll( /*Name country_nr type_nr latitude longtitude*/
                     Stream.of("Pozo_Izquierdo 0 2 27.8333 -15.4667", "Hel_Penninsula 2 1 54.6957333 18.6788396 ",
                             "Zegrzynskie_Lake 2 1 52.229676 21.012229", "Karpathos 1 0 35.583331 27.1333328",
-                            "Prasonisi 1 0 35.876163162 27.75666364", "El_Medano 0 2 28.03833318 -16.5333312")
-                            //.map(str-> { String[] s = str.split(" ");
-                            //return s[0];}).filter(str-> spotRepository.checkIfExists() == null)
+                            "Prasonisi 1 0 35.876163162 27.75666364", "El_Medano 0 2 28.03833318 -16.5333312",
+                            "Majanicho 0 2 28.7393 -13.9396", "Risco_Del_Paso 0 0 28.1107 -14.2642",
+                            "Neusiedl_Lake 3 1 47.8650 16.7776", "Knokke 4 2 51.3464 3.2859",
+                            "Loissin 5 1 54.1124 13.5281", "Lefkada 1 0 38.7066 20.6407",
+                            "Limnos 1 0 39.9198 25.1415", "Naxos 1 0 37.1036 25.3777",
+                            "Porto_Botte 6 0 39.0530 8.5644", "Porto_Pollo 6 1 41.1851 9.3250",
+                            "Garda_Lake 6 1 45.8778 10.8909", "Ulcinj 8 1 41.9311 19.2148",
+                            "Zeeland 9 2 51.4940 3.8497", "Texel 9 2 53.0548 4.7977",
+                            "Burgau 10 2 37.0744 -8.7750", "Tarifa 0 2 36.0143 -5.6044",
+                            "Silvaplana_Lake 11 1 46.4504 9.7933", "Camber_Sands 12 2 50.9327 0.7960")
                             .filter(str-> spotRepository.checkIfExists(str.split(" ")[0]) == null )
                             .map(name -> {
                                 String[] split = name.split(" ");
-                               // if( spotRepository.checkIfExists(split[0])!= null )
-                                 //   return null;
 
                                 Spot spot = new Spot();
                                 spot.setName(split[0]);
                                 spot.setLatitude(Double.valueOf(split[3]));
                                 spot.setLongtitude(Double.valueOf(split[4]));
-                                //spot.setCountry(split[1]);
                                 spot.setCountry(countries.get(Integer.parseInt(split[1])));
                                 spot.setType(Spot.Type.values()[Integer.parseInt(split[2])]);
-                                //spot.setWindPercentage(r.nextInt()%100);
 
-                                //?????????????? Weather.setCoordinates(spot.getLatitude(), spot.getLatitude());
-
-                                //spot.setWindPercentage((int)windFromJson());
                                 spot.setWindPercentage(0);
                                 spot.setAvgWindSpeed(0.0);
                                 spot.setAvgGustSpeed(0.0);
@@ -152,7 +143,6 @@ public class SpotService {
 
                                 return spot;
                             }).collect(Collectors.toList()));
-            //   }
 
         Date today = new Date();
             List<Spot> spots = spotRepository.findAll();
@@ -189,7 +179,6 @@ public class SpotService {
                                     return day;
                                 }).collect(Collectors.toList()));
 
-                //month
             }
         }
 
