@@ -18,9 +18,13 @@ import com.windstatsapp.backend.service.SpotService;
 import com.windstatsapp.backend.weatherapi.UserPreferences;
 import com.windstatsapp.ui.MainLayout;
 import com.windstatsapp.ui.views.spotInfoView.SpotInfoView;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
+@Scope("prototype")
 @PageTitle("Country | WindStatsApp" )
 @Route(value = "country", layout = MainLayout.class)
 public class CountryView extends VerticalLayout{

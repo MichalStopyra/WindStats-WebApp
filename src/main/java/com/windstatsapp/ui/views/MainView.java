@@ -22,15 +22,18 @@ import org.springframework.stereotype.Component;
 @PageTitle("Home | WindStats App")
 public class MainView extends VerticalLayout {
 
-    //Binder<UserPreferences> binder = new BeanValidationBinder<>(UserPreferences.class);
     UserPreferences userPreferences = new UserPreferences();
     Binder<UserPreferences> binder = new Binder<>();
 
-    SpotService spotService;//???????????????????????????????????
+    SpotService spotService;
+    Select<String> monthSelect = new Select<>();
+    Select<String> knotsSelect = new Select<>();
+    Select<String> spotTypeSelect = new Select<>();
+    Button button = new Button("APPLY");
+
 
 
     public MainView(SpotService spotService) {
-        //createHeader();
         this.spotService = spotService;
         createInstruction();
         createSelects();
@@ -38,40 +41,34 @@ public class MainView extends VerticalLayout {
     }
 
     private void createSelects() {
-        Select<String> monthSelect = new Select<>();
         monthSelect.setItems("January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December");
         monthSelect.setLabel("Month");
+        monthSelect.setId("month-select");
         monthSelect.setEmptySelectionAllowed(false);
-        //titleSelect.addComponents(null, new Hr());
         binder.forField(monthSelect)
                 .asRequired(
                         "Please choose the appropriate month")
                 .bind(UserPreferences::getMonthChoice, UserPreferences::setMonthChoice);
 
-        Select<String> knotsSelect = new Select<>();
         knotsSelect.setItems("00-10", "11-20", "21-30", "31-40", "41-50");
         knotsSelect.setLabel("Wind Strength [knots]");
+        knotsSelect.setId("knots-select");
+
         knotsSelect.setEmptySelectionAllowed(false);
-        //titleSelect.addComponents(null, new Hr());
         binder.forField(knotsSelect)
                 .asRequired(
                         "Please choose the appropriate wind strength")
                 .bind(UserPreferences::getWindChoice, UserPreferences::setWindChoice);
 
-
-
-        Select<String> spotTypeSelect = new Select<>();
         spotTypeSelect.setItems("Flat Water", "Wave", "Chop");
         spotTypeSelect.setLabel("Spot Type");
+        spotTypeSelect.setId("type-select");
         spotTypeSelect.setEmptySelectionAllowed(false);
-        //titleSelect.addComponents(null, new Hr());
         binder.forField(spotTypeSelect)
                 .asRequired(
                         "Please choose the appropriate spot type")
                 .bind(UserPreferences::getSpotTypeChoice, UserPreferences::setSpotTypeChoice);
-
-       // add(monthSelect, knotsSelect, spotTypeSelect);
 
         HorizontalLayout horizontalLayout = new HorizontalLayout(monthSelect, knotsSelect, spotTypeSelect);
         horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.START);
@@ -90,13 +87,11 @@ public class MainView extends VerticalLayout {
     }
 
     private void createApplyButton() {
-        Button button = new Button("APPLY");
         button.addClickListener(this::showButtonClickedMessage);
 
-        //navigating
         button.addClickListener( event -> {
             if (binder.writeBeanIfValid(userPreferences)) {
-                UI.getCurrent().navigate("spotlist");
+                navigateToList();
             }
         });
 
@@ -105,19 +100,11 @@ public class MainView extends VerticalLayout {
         add(temp);
     }
 
+    private void navigateToList() {
+        UI.getCurrent().navigate("spotlist");
+    }
+
     private void showButtonClickedMessage(ClickEvent<Button> buttonClickEvent) {
     }
 
-
-
-   /* private void createHeader() {
-        H1 logo = new H1("WindStats App");
-        logo.addClassName("logo");
-
-        VerticalLayout header = new VerticalLayout(logo);
-        header.addClassName("header");
-        header.setWidth("100%");
-        header.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        add(header);
-    }*/
 }

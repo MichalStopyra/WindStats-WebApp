@@ -73,14 +73,6 @@ public class Spot extends AbstractEntity implements Cloneable {
         this.monthList = monthList;
     }
 
-
-    /*public Spot(String name, String countryName, int windPercentage) {
-        this.name = name;
-        this.countryName = countryName;
-        this.windPercentage = windPercentage;
-    }*/
-
-
     public String getName() {
         return name;
     }

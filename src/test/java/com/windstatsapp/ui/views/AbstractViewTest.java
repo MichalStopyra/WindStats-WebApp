@@ -1,4 +1,4 @@
-package com.windstatsapp;
+package com.windstatsapp.ui.views;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,6 +38,10 @@ public abstract class AbstractViewTest extends ParallelTest {
 
     public AbstractViewTest() {
         this("", By.tagName("body"));
+    }
+
+    public AbstractViewTest(String route) {
+        this(route, By.tagName("body"));
     }
 
     protected AbstractViewTest(String route, By rootSelector) {

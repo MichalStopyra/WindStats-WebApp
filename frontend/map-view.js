@@ -38,7 +38,7 @@ function hideError() {
 }
 </script>
 
-<div class="mapdiv" id="mapHtml" onclick = "hideError">
+<div class="mapdiv" id="mapHtml">
 
  <svg version="1.2" viewbox="0 0 1000 684" xmlns="http://www.w3.org/2000/svg">
 

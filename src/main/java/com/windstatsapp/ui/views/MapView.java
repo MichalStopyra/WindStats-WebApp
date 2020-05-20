@@ -36,7 +36,6 @@ private void handleClick( @EventData("event.srcElement.id") String name) {
 }
 
 
-
 private void setCountry(String countryName) {
         if(countryName!=null) {
             UserPreferences.country = countryName;
