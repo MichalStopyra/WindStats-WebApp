@@ -27,12 +27,6 @@ public class Weather {
     }
 
     public static String doHttpGet(int unixTime){
-        //http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=<ApiKey>
-        //http://dataservice.accuweather.com/forecasts/v1/daily/1day/<CITYID>?apikey=<ApiKey>
-
-        //https://api.darksky.net/forecast/4b90d7a5baccffb6e73c7a60c1ebe503/37.8267,-122.4233
-
-        //String url = "http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=" + ApiKey.getApiKey();
 
         String url = "https://api.darksky.net/forecast/" + ApiKey.getApiKey() + getCoordinates() + "," + Integer.toString(unixTime);
 
@@ -42,8 +36,6 @@ public class Weather {
         try {
             resp = client.execute(get);
             HttpEntity entity = resp.getEntity();
-            //System.out.println("Json response");
-            //System.out.println(EntityUtils.toString(entity));
             return EntityUtils.toString(entity);
         }
         catch (IOException ioe) { System.err.println("Something went wrong getting the weather: ");  ioe.printStackTrace(); }

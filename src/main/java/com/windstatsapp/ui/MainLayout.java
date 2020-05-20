@@ -4,6 +4,7 @@ package com.windstatsapp.ui;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -25,7 +26,7 @@ import com.windstatsapp.ui.views.MapView;
 
 )
 
-//@CssImport("./styles/shared-styles.css")
+@CssImport("./styles/shared-styles.css")
 public class MainLayout extends AppLayout {
 
     MapView m = new MapView();
@@ -62,7 +63,6 @@ public class MainLayout extends AppLayout {
         addToDrawer(new VerticalLayout(
                 listLink,
                 mapLink
-                //new RouterLink("Dashboard", DashboardView.class)
         ));
     }
 }

@@ -20,7 +20,11 @@ import com.windstatsapp.backend.service.SpotService;
 import com.windstatsapp.backend.weatherapi.UserPreferences;
 import com.windstatsapp.ui.MainLayout;
 import com.windstatsapp.ui.views.spotInfoView.SpotInfoView;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component
+@Scope("prototype")
 @PageTitle("Spots | WindStatsApp" )
 @Route(value = "spotlist", layout = MainLayout.class)
 public class ListView extends VerticalLayout {
@@ -30,6 +34,8 @@ public class ListView extends VerticalLayout {
     Grid<Spot> grid = new Grid<>(Spot.class);
     TextField filterText = new TextField();
     Boolean TypeBoxValue = false;
+    Checkbox checkbox = new Checkbox();
+
 
 
     public ListView( SpotService spotService,
@@ -38,10 +44,8 @@ public class ListView extends VerticalLayout {
         addClassName("list-view");
         setSizeFull();
 
-        //UserPreferences.spotTypeChoice = UserPreferences.spotTypeChoice.replaceAll(" ", "_");
 
-
-        if(UserPreferences.monthChoice != null /* UserPreferences.monthChoice.isEmpty()*/) {
+        if(UserPreferences.monthChoice != null ) {
             updateListWithMonth();
             UserPreferences.spotTypeChoice = UserPreferences.spotTypeChoice.replaceAll(" ", "_");
         }
@@ -50,7 +54,6 @@ public class ListView extends VerticalLayout {
 
         spotInfoView = new SpotInfoView(null, spotService);
 
-        //Div content = new Div(grid, spotInfoView);
         HorizontalLayout content = new HorizontalLayout(grid, spotInfoView);
         spotInfoView.setVisible(false);
         content.addClassName("content");
@@ -68,8 +71,6 @@ public class ListView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassName("spot-grid");
         grid.setSizeFull();
-        //grid.removeColumnByKey("country");
-        //grid.removeColumnByKey("name");
 
         grid.setColumns("name", "windPercentage", "avgWindSpeed", "avgGustSpeed", "avgTemperature");
         grid.addColumn(spot -> {
@@ -101,9 +102,7 @@ public class ListView extends VerticalLayout {
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e -> updateListFalseTypeBox());
 
-        Checkbox checkbox = new Checkbox();
         if( UserPreferences.spotTypeChoice != null)
-          //  checkbox.setLabel("Show only Flat Water Spots");
             checkbox.setLabel("Show Only " + UserPreferences.spotTypeChoice.replaceAll("_", " ") + " Spots");
         else
             checkbox.setLabel("Empty list");
@@ -122,10 +121,8 @@ public class ListView extends VerticalLayout {
 
 
 
-        //      chosenMonth = "Month: Chosen Month";
         HorizontalLayout toolbar = new HorizontalLayout(filterText, checkbox, leftButton);
         toolbar.setDefaultVerticalComponentAlignment(Alignment.CENTER);
-//        toolbar.add(chosenMonth);
 
         toolbar.addClassName("toolbar");
         return toolbar;
@@ -137,7 +134,7 @@ public class ListView extends VerticalLayout {
         grid.setItems(spotService.findAll(filterText.getValue()));
     }
 
-    private void updateListTrueTypeBox() { grid.setItems(spotService.filterSpotByType(filterText.getValue())); }
+    protected void updateListTrueTypeBox() { grid.setItems(spotService.filterSpotByType(filterText.getValue())); }
 
 
     private void updateListWithMonth() {

@@ -5,6 +5,7 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.windstatsapp.backend.entity.Spot;
 import com.windstatsapp.backend.service.SpotService;
@@ -41,7 +42,14 @@ public class SpotInfoView extends VerticalLayout {
         layout.setSpacing(true);
         H1 spotName = new H1(spot.getName());
         spotName.addClassName("spotName");
-        layout.add(spotName);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(spotName);
+        horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        horizontalLayout.setSpacing(true);
+        if ( forecastFlag == true ) {
+            Image scrollDown = new Image("./icons/scrollDown.png", "scrollDown");
+            horizontalLayout.add(scrollDown);
+        }
+        layout.add(horizontalLayout);
         Image picture = new Image(spot.getImgPath(), "spotImage");
         layout.add(picture);
         String text = new String();
@@ -75,7 +83,6 @@ public class SpotInfoView extends VerticalLayout {
     public void addEachMonthStats(){
         List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December");
-        // for (int tempYear = 2019; tempYear <= 2020; ++tempYear)
         List<EachMonthSpotHelper> eachMonthSpotHelperList= new ArrayList<>();
 
 

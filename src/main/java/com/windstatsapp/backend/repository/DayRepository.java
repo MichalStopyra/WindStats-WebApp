@@ -12,12 +12,6 @@ public interface DayRepository extends JpaRepository<Day, Long> {
             "where lower(d.monthName) like lower(concat('%', :searchTerm, '%')) " )
     List<Day> search(@Param("searchTerm") String searchTerm);
 
-   /* @Query("select round(avg(wind_speed)) from Day d " +
-            "where lower(d.monthName) like lower(concat('%', :monthM, '%')) " )
-    Double avgWindSpeed(@Param("monthM") String monthM);*/
-
-   /* @Query("SELECT new com/windstatsapp/backend/weatherapi/tools/avgResults ( AVG(wind_speed) as avg_wind_speed FROM Day d WHERE lower(d.monthName) like lower(concat('%', :monthM, '%')) " )
-    public avgResults avgWindSpeed(@Param("monthM") String monthM);*/
    @Query("SELECT AVG(d.windSpeed) FROM Day d WHERE lower(d.monthName) like lower(concat('%', :monthM, '%')) AND d.spot.id =:spotID" )
     Double avgWindSpeed(@Param("monthM") String monthM, @Param("spotID") Long spotID);
 
