@@ -1,5 +1,5 @@
 # WindStats-WebApp
-Web application showing user a list of best windsurfing spots due to their preferences
+Aplikacja Webowa wskazująca użytkownikowi najlepszy spot windsurfingowy zgodnie z wybranymi przez niego preferencjami.
 
 
 Michał Stopyra
